@@ -1,7 +1,7 @@
 /**
  * get_precision - Gets the precision for printing from format string
  * @format: Formatted string containing format specifiers
- * @i: Pointer to current index in format string 
+ * @i: Pointer to current index in format string
  * @list: Argument list
  *
  * Return: Precision value, or -1 on error
@@ -25,7 +25,7 @@ int get_precision(const char *format, int *i, va_list list)
 		curr_i++;
 
 		/* Parse digits after '.' as precision */
-		while (is_digit(format[curr_i])) 
+		while (is_digit(format[curr_i]))
 		{
 			precision = precision * 10 + (format[curr_i] - '0');
 			curr_i++;
