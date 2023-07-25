@@ -1,63 +1,40 @@
 #include "main.h"
 
 /**
- * get_precision - Gets the precision for printing from format string
- * @format: Formatted string containing format specifiers
- * @i: Pointer to current index in format string 
- * @list: Argument list
- * Return: Precision value, or -1 on error  
+ * get_precision - Calculates the precision for printing
+ * @format: Formatted string in which to print the arguments
+ * @i: List of arguments to be printed.
+ * @list: list of arguments.
+ *
+ * Return: Precision.
  */
 int get_precision(const char *format, int *i, va_list list)
 {
+	int curr_i = *i + 1;
 	int precision = -1;
-	int curr_i = 0;
 
-	// Check if format string is valid
-	if (!format || format[0] == '\0')
-		return -1; 
-
-	curr_i = *i + 1;
-
-	// Precision starts after '.'
 	if (format[curr_i] != '.')
-	{
-		return precision; 
-	}
+		return (precision);
 
-  // Initialize precision to 0 
 	precision = 0;
 
-	// Parse characters after '.'  
 	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
 	{
-
-	// Accumulate precision digits 
 		if (is_digit(format[curr_i]))
 		{
-
-			// Check for overflow  
-			if (precision > (INT_MAX / 10))
-			{
-				return -1;
-			}
-
-			precision = (precision * 10) + (format[curr_i] - '0');
-
-			// Get precision from arguments 
+			precision *= 10;
+			precision += format[curr_i] - '0';
 		}
-	else if (format[curr_i] == '*')
-	{
-		curr_i++;
-		precision = va_arg(list, int);
-		break;
-
-	// Invalid character, stop parsing 
-	}
-	else
-		break;
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			precision = va_arg(list, int);
+			break;
+		}
+		else
+			break;
 	}
 
-	// Update format index
 	*i = curr_i - 1;
 
 	return (precision);
