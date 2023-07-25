@@ -95,7 +95,7 @@ int write_num(int ind, char buffer[],
 	int flags, int width, int prec,
 	int length, char padd, char extra_c)
 {
-	int i, padd_start = 1;
+	int i, padding_init_pos = 1;
 
 	if (prec == 0 && ind == BUFF_SIZE - 2 && buffer[ind] == '0' && width == 0)
 		return (0); /* printf(".0d", 0)  no char is printed */
@@ -127,9 +127,9 @@ int write_num(int ind, char buffer[],
 		else if (!(flags & F_MINUS) && padd == '0')/* extra char to left of padd */
 		{
 			if (extra_c)
-				buffer[--padd_start] = extra_c;
-			return (write(1, &buffer[padd_start], i - padd_start) +
-				write(1, &buffer[ind], length - (1 - padd_start)));
+				buffer[--padding_init_pos] = extra_c;
+			return (write(1, &buffer[padding_init_pos], i - padding_init_pos) +
+				write(1, &buffer[ind], length - (1 - padding_init_pos)));
 		}
 	}
 	if (extra_c)
@@ -204,12 +204,12 @@ int write_unsgnd(int is_negative, int ind,
  * @flags: Flags specifier
  * @padd: Char representing the padding
  * @extra_c: Char representing extra char
- * @padd_start: Index at which padding should start
+ * @padding_init_pos: Index at which padding should start
  *
  * Return: Number of written chars.
  */
 int write_pointer(char buffer[], int ind, int length,
-	int width, int flags, char padd, char extra_c, int padd_start)
+	int width, int flags, char padd, char extra_c, int padding_init_pos)
 {
 	int i;
 
@@ -237,11 +237,11 @@ int write_pointer(char buffer[], int ind, int length,
 		else if (!(flags & F_MINUS) && padd == '0')/* extra char to left of padd */
 		{
 			if (extra_c)
-				buffer[--padd_start] = extra_c;
+				buffer[--padding_init_pos] = extra_c;
 			buffer[1] = '0';
 			buffer[2] = 'x';
-			return (write(1, &buffer[padd_start], i - padd_start) +
-				write(1, &buffer[ind], length - (1 - padd_start) - 2));
+			return (write(1, &buffer[padding_init_pos], i - padding_init_pos) +
+				write(1, &buffer[ind], length - (1 - padding_init_pos) - 2));
 		}
 	}
 	buffer[--ind] = 'x';
